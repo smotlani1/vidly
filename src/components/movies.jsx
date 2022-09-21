@@ -43,7 +43,8 @@ class Movies extends Component {
   };
 
   handleSort = (path) => {
-    this.setState({ sortColumn: { path, order: "asc" } });
+    const order = this.state.sortColumn.order === "asc" ? "desc" : "asc";
+    this.setState({ sortColumn: { path, order } });
   };
 
   render() {
@@ -53,6 +54,7 @@ class Movies extends Component {
       currentPage,
       movies: allMovies,
       selectedGenre,
+      sortColumn,
     } = this.state;
 
     if (count === 0) return <p>There are no movies in the DB</p>;
@@ -61,7 +63,9 @@ class Movies extends Component {
       selectedGenre && selectedGenre._id
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
-    const movies = paginate(filtered, currentPage, pageSize);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const movies = paginate(sorted, currentPage, pageSize);
 
     return (
       <div className="row">
