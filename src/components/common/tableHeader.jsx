@@ -13,6 +13,13 @@ class TableHead extends Component {
     this.props.onSort(sortColumn);
   };
 
+  renderSortIcon = (column) => {
+    if (column.path !== this.props.sortColumn.path) return null;
+    if (this.props.sortColumn.order === "asc")
+      return <i className="fa fa-sort-asc"></i>;
+    return <i className="fa fa-sort-desc"></i>;
+  };
+
   render() {
     const { columns } = this.props;
     return (
@@ -20,18 +27,13 @@ class TableHead extends Component {
         <tr>
           {columns.map((column) => (
             <th
+              className="clickable"
               key={column.path || column.key}
               onClick={() => this.raiseSort(column.path)}
             >
-              {column.label}
+              {column.label} {this.renderSortIcon(column)}
             </th>
           ))}
-          {/* <th >Title</th>
-          <th onClick={() => this.raiseSort("genre.name")}>Genre</th>
-          <th onClick={() => this.raiseSort("numberInStock")}>Stock</th>
-          <th onClick={() => this.raiseSort("dailyRentalRate")}>Rate</th>
-          <th></th>
-          <th></th> */}
         </tr>
       </thead>
     );
